@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">UnitEase</string>
+    <string name="logo_image">Logo image</string>
+    <string name="welcome_text">Choose your conversion</string>
+    <string name="custom">Favorites</string>
+    <string name="length">Length</string>
+    <string name="weight">Weight</string>
+    <string name="all_options">All options</string>
+    <string name="recyclerview_scroll_button">RecyclerView scroll button</string>
+</resources>
