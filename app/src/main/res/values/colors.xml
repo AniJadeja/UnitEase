@@ -7,10 +7,25 @@
     <color name="black_100">#25363636</color>
     <!-- plain colors -->
     <color name="yellow_500">#f1ff9d</color>
+    <color name="yellow_500_alpha_80">#CCF1FF9D</color>
+    <color name="yellow_500_alpha_10">#1AF1FF9D</color>
     <color name="green_500">#c2fcad</color>
+    <color name="green_500_alpha_80">#CCC2FCAD</color>
+    <color name="green_500_alpha_10">#1AC2FCAD</color>
     <color name="orange_500">#FFCAA4</color>
+    <color name="orange_500_alpha_80">#CCFFCAA4</color>
+    <color name="orange_500_alpha_10">#1AFFCAA4</color>
     <color name="orange_200">#FFF0D9</color>
+    <color name="orange_200_alpha_80">#CCFFF0D9</color>
+    <color name="orange_200_alpha_10">#1AFFF0D9</color>
     <color name="teal_500">#AAFFEB</color>
+    <color name="teal_500_alpha_80">#CCAAFFEB</color>
+    <color name="teal_500_alpha_10">#1AAAFFEB</color>
     <color name="pink_500">#FFD1EF</color>
+    <color name="pink_500_alpha_80">#CCFFD1EF</color>
+    <color name="pink_500_alpha_10">#1AFFD1EF</color>
     <color name="blue_500">#CADCFF</color>
+    <color name="blue_500_alpha_80">#CCCADCFF</color>
+    <color name="blue_500_alpha_10">#1ACADCFF</color>
+    <color name="transparent">#00000000</color>
 </resources>

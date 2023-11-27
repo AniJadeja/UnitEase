@@ -4,6 +4,181 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".activity.ConversionOptionsActivity">
+
+    <androidx.wear.widget.BoxInsetLayout
+        android:id="@+id/app_screen_init"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/h_guideline_safe_start">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:boxedEdges="left|right"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/logo_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/views_logo_size"
+                android:layout_marginTop="@dimen/small_margin"
+                android:contentDescription="@string/logo_image"
+                android:src="@drawable/app_logo" />
+
+            <TextView
+                style="@style/Theme.UnitEase.PrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/enter_conversion_value"
+                app:boxedEdges="all" />
+
+        </LinearLayout>
+
+    </androidx.wear.widget.BoxInsetLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/conversion_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/rect_button_height"
+        app:layout_constraintStart_toStartOf="@id/v_guideline_safe_start"
+        app:layout_constraintTop_toTopOf="@id/h_guideline_safe_start"
+        app:layout_constraintBottom_toTopOf="@id/conversion_text_input_layout"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_mid"
+        android:layout_marginStart="@dimen/small_margin"
+        android:layout_marginTop="@dimen/small_margin"
+        android:text="@string/length"
+        android:gravity="center"
+        app:icon="@drawable/length_logo"
+        style="@style/Theme.UnitEase.BaseButtonStyle"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/checkbox_button"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        app:layout_constraintBottom_toBottomOf="@id/conversion_button"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_safe_end"
+        app:layout_constraintTop_toTopOf="@id/conversion_button"
+        android:layout_marginEnd="@dimen/small_margin"
+        android:layout_margin="@dimen/small_padding"
+        style="@style/Theme.UnitEase.BaseButtonStyle"
+        android:gravity="center"
+        app:iconPadding="0dp"
+        android:backgroundTint="@color/transparent"
+        app:elevation="0dp"
+        app:iconSize="16dp"
+        android:scaleX="1.1"
+        android:elevation="0dp"
+        />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/conversion_text_input_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/v_guideline_safe_start"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_safe_end"
+        app:layout_constraintTop_toBottomOf="@id/conversion_button"
+        app:layout_constraintBottom_toTopOf="@id/options_recycler_view"
+        android:hint="@string/value">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/conversion_value_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="32dp"
+            android:textSize="@dimen/small_font_size"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:paddingTop="2dp"
+            android:textColor="@color/yellow_500"
+            android:gravity="center"
+            android:inputType="number"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    
+    <androidx.wear.widget.WearableRecyclerView
+        android:id="@+id/options_recycler_view"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/rect_button_height"
+        app:layout_constraintStart_toStartOf="@id/v_guideline_safe_start"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_safe_end"
+        app:layout_constraintTop_toBottomOf="@id/conversion_text_input_layout"
+        app:layout_constraintBottom_toTopOf="@id/get_conversions_button"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/get_conversions_button"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/rect_button_height"
+        android:gravity="center"
+        style="@style/Theme.UnitEase.BaseButtonStyle"
+        app:cornerRadius="@dimen/rounded_corners"
+        app:layout_constraintTop_toBottomOf="@id/options_recycler_view"
+        app:layout_constraintStart_toStartOf="@id/button_safe_start"
+        app:layout_constraintEnd_toEndOf="@id/button_safe_end"
+        app:layout_constraintBottom_toBottomOf="@id/button_safe_bottom"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/button_safe_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.25" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/button_safe_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/button_safe_bottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v_guideline_safe_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v_guideline_mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v_guideline_safe_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h_guideline_safe_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.17" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h_guideline_safe_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.77" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

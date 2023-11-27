@@ -6,5 +6,10 @@
     <string name="length">Length</string>
     <string name="weight">Weight</string>
     <string name="all_options">All options</string>
-    <string name="recyclerview_scroll_button">RecyclerView scroll button</string>
+    <string name="recyclerview_scroll_button">RecyclerView scroll unitEaseButton</string>
+    <string name="enter_conversion_value">Enter Conversion Value</string>
+    <string name="value">Value</string>
+    <string name="option">Option</string>
+    <string name="get">Get\u0020</string>
+    <string name="s">s</string>
 </resources>

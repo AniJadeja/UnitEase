@@ -9,32 +9,35 @@
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/left_button"
+            android:id="@+id/button_0"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/Theme.UnitEase.BaseButtonStyle"
             app:iconGravity="textTop"
             android:layout_weight="1"
+            android:tag="button_0"
             android:layout_margin="2dp"/>
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/center_button"
+            android:id="@+id/button_1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/Theme.UnitEase.BaseButtonStyle"
             app:iconGravity="textTop"
             android:layout_weight="1"
+            android:tag="button_1"
             android:layout_margin="2dp"/>
 
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/right_button"
+            android:id="@+id/button_2"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             style="@style/Theme.UnitEase.BaseButtonStyle"
             app:iconGravity="textTop"
             android:layout_weight="1"
+            android:tag="button_2"
             android:layout_margin="2dp"/>
 
 </LinearLayout>

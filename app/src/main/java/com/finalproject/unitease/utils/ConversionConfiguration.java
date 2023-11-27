@@ -1,6 +1,24 @@
 package com.finalproject.unitease.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ConversionConfiguration {
+    private List<String[]> options;
+    private int id;
+
+    public  ConversionConfiguration(int id){
+        this.options = new ArrayList<>();
+        this.options.add(LENGTH_UNITS);
+        this.options.add(WEIGHT_UNITS);
+        this.options.add(VOLUME_UNITS);
+        this.options.add(SPEED_UNITS);
+        this.options.add(AREA_UNITS);
+        this.options.add(TEMP_UNITS);
+        this.id = id;
+    }
+
+
     private static final String[] LENGTH_UNITS = {
             "Centimeters",
             "Inches",
@@ -42,6 +60,11 @@ public class ConversionConfiguration {
             "Celsius",
             "Fahrenheit"
     };
+
+
+    public String[] getOptions(){
+        return options.get(id);
+    }
 
 
 }

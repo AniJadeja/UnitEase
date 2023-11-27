@@ -1,6 +1,7 @@
 package com.finalproject.unitease.activity;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -13,11 +14,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.wear.widget.WearableRecyclerView;
 
-import com.finalproject.unitease.databinding.ActivityChooseConversionBinding;
+import com.finalproject.unitease.databinding.ActivityChooseConversionRoundedBinding;
 import com.finalproject.unitease.databinding.ActivityChooseConversionRectangularBinding;
-import com.finalproject.unitease.recyclerviewadapter.RecyclerViewAdapter;
+import com.finalproject.unitease.recyclerviewadapter.ConversionsRecyclerViewAdapter;
 
-public class ChooseConversionActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChooseConversionActivity extends AppCompatActivity implements View.OnClickListener, ConversionsRecyclerViewAdapter.ButtonClickListener{
 
     private static final String FLOW_TAG = "Flow - ChooseConversionActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ChooseConversionActivity";
@@ -32,6 +33,9 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        //startActivity(new Intent(this, ConversionOptionsActivity.class).putExtra("Conversion", "Length"));
         SplashScreen.installSplashScreen(this);
         isScreenRound = this.getResources().getConfiguration().isScreenRound();
         if (isScreenRound) configureRoundScreen();
@@ -77,7 +81,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         recyclerView.setHasFixedSize(true);
         recyclerView.setEdgeItemsCenteringEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(getApplicationContext(), isScreenRound);
+        ConversionsRecyclerViewAdapter adapter = new ConversionsRecyclerViewAdapter(getApplicationContext(), isScreenRound, this);
         recyclerView.setAdapter(adapter);
         recyclerView.suppressLayout(true);
         Log.d(FLOW_TAG, "setUpRecyclerView: RecyclerView set up");
@@ -90,6 +94,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
             @Override
             protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
+               
                 return (float) 300 / displayMetrics.densityDpi;
             }
         };
@@ -98,7 +103,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
 
     // configure the screen for round screens
     private void configureRoundScreen() {
-        ActivityChooseConversionBinding binding = ActivityChooseConversionBinding.inflate(getLayoutInflater());
+        ActivityChooseConversionRoundedBinding binding = ActivityChooseConversionRoundedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         recyclerView = binding.rvChooseConversation;
         scrollButton = binding.scrollButton;
@@ -115,4 +120,9 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     }
 
 
+    @Override
+    public void onButtonClick(String buttonText) {
+        Log.d(DEBUG_TAG, "onButtonClick: clicked on button " + buttonText);
+        startActivity(new Intent(this, ConversionOptionsActivity.class).putExtra("Conversion", buttonText));
+    }
 }
