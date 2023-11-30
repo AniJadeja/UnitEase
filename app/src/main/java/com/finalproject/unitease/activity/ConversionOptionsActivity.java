@@ -20,6 +20,9 @@ import androidx.wear.widget.WearableRecyclerView;
 
 import com.finalproject.unitease.R;
 import com.finalproject.unitease.databinding.ActivityCovnersationOptionsBinding;
+
+import com.finalproject.unitease.model.FavoriteConversions;
+import com.finalproject.unitease.model.FavoritesModel;
 import com.finalproject.unitease.recyclerviewadapter.OptionsRecyclerViewAdapter;
 import com.finalproject.unitease.uicomponent.UnitEaseButton;
 import com.finalproject.unitease.utils.ConversionConfiguration;
@@ -44,7 +47,9 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
     private TextInputEditText conversionEditText;
     private Boolean isConversionButtonFavorite = false;
 
+    private static String unit;
     private String[] options;
+    FavoriteConversions favoriteConversions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,15 +103,19 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
 
         conversionButton.setText(conversionType);
         conversionButton.setBackgroundColor(getColor(primaryColor));
+        conversionButton.setIconResource(button.getButtonIcon());
         getConversionButton.setBackgroundColor(getColor(primaryColor));
         getConversionButton.setText(getConversionButtonText);
 
         conversionEditText.setTextColor(getColor(button.getButtonBackgroundColor()));
 
         checkButton.setIconTint(ColorStateList.valueOf(getColor(primaryColor)));
-        checkButton.setIconResource(R.drawable.heart_filled);
+        checkButton.setIconResource(R.drawable.heart);
+        favoriteConversions = new FavoriteConversions(this);
+        setFavoriteButton(favoriteConversions.isFavorite(conversionType));
         checkButton.setStateListAnimator(null);
         checkButton.setOnClickListener(this);
+        getConversionButton.setOnClickListener(this);
 
         ConversionConfiguration configuration = new ConversionConfiguration(conversionId);
         options = configuration.getOptions();
@@ -150,25 +159,50 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
     @Override
     public void onOptionSelected(String buttonText) {
         Log.d(DEBUG_TAG, "onOptionSelected: selected option is " + buttonText);
+        unit = buttonText;
     }
 
     @Override
     public void onClick(View v) {
 
         if (v == checkButton) {
-            if (isConversionButtonFavorite) {
-                checkButton.setIconResource(R.drawable.heart_filled);
-                isConversionButtonFavorite = false;
-            } else {
-                checkButton.setIconResource(R.drawable.heart);
-                isConversionButtonFavorite = true;
+            if (!isConversionButtonFavorite) {
+                setFavoriteButton(true);
             }
         } else if (v == getConversionButton) {
+            if (conversionEditText.getText().toString().isEmpty()) {
+                conversionInputLayout.setError(getString(R.string.enter_value));
+                conversionInputLayout.setErrorEnabled(true);
+                return;
+            }
+            if (unit == null) {
+                conversionInputLayout.setError(getString(R.string.select_unit));
+                conversionInputLayout.setErrorEnabled(true);
+
+                return;
+            }
+            conversionInputLayout.setErrorEnabled(false);
             Intent intent = new Intent(this, ResultsActivity.class);
             intent.putExtra("Conversion", conversionButton.getText().toString());
             intent.putExtra("ConversionValue", conversionEditText.getText().toString());
+            intent.putExtra("Unit", unit);
+            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions : "+ conversionButton.getText().toString());
+            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions Value : "+ conversionEditText.getText().toString());
+            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Unit : "+ unit);
             startActivity(intent);
 
+        }
+
+    }
+
+    private void setFavoriteButton( Boolean isFavorite) {
+        if (isFavorite) {
+            checkButton.setIconResource(R.drawable.heart_filled);
+            isConversionButtonFavorite = true;
+            favoriteConversions.addFavorite(conversionButton.getText().toString());
+        } else {
+            checkButton.setIconResource(R.drawable.heart);
+            isConversionButtonFavorite = false;
         }
 
     }

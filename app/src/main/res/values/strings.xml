@@ -12,4 +12,12 @@
     <string name="option">Option</string>
     <string name="get">Get\u0020</string>
     <string name="s">s</string>
+    <string name="conversion_complete">Conversion Complete</string>
+    <string name="centimeters">Centimeters</string>
+    <string name="hypen">-</string>
+    <string name="enter_value">Must enter value</string>
+    <string name="select_unit">Unit is not selected</string>
+    <string name="welcome_choose_your_activity_type">Welcome, choose your activity type</string>
+    <string name="view_history">View History</string>
+    <string name="conversion">Conversion</string>
 </resources>

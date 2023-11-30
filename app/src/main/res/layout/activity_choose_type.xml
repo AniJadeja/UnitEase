@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChooseActivityType">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Theme.UnitEase.PrimaryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/conversion_button"
+        android:text="@string/welcome_choose_your_activity_type"
+        android:textSize="@dimen/small_font_size"
+        app:boxedEdges="all"
+        android:layout_marginBottom="@dimen/small_margin"
+        />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/conversion_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Theme.UnitEase.BaseButtonStyle"
+        app:icon="@drawable/app_logo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/history_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:iconPadding="5dp"
+        app:iconTint="@color/yellow_500"
+        android:backgroundTint="@color/black_500"
+        android:padding="@dimen/small_margin"
+        app:cornerRadius="@dimen/small_margin"
+        app:iconGravity="top"
+        android:text="@string/conversion"
+        android:textColor="@color/white_700"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/history_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Theme.UnitEase.BaseButtonStyle"
+        app:icon="@drawable/history"
+        app:layout_constraintStart_toEndOf="@id/conversion_button"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:iconPadding="5dp"
+        app:iconTint="@color/yellow_500"
+        app:cornerRadius="@dimen/small_margin"
+        android:padding="@dimen/small_margin"
+        android:backgroundTint="@color/black_500"
+        app:iconGravity="top"
+        android:text="@string/view_history"
+        android:textColor="@color/white_700"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

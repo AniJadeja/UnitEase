@@ -1,10 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.ResultsActivity"
-    android:orientation="vertical"
-    android:weightSum="5">
+    tools:context=".activity.ResultsActivity">
 
-</LinearLayout>
+    <androidx.wear.widget.BoxInsetLayout
+        android:id="@+id/app_screen_init"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/h_guideline_safe_start"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:boxedEdges="left|right">
+
+            <ImageView
+                android:id="@+id/logo_img"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/views_logo_size"
+                android:layout_marginTop="@dimen/small_margin"
+                android:contentDescription="@string/logo_image"
+                android:src="@drawable/app_logo" />
+
+            <TextView
+                style="@style/Theme.UnitEase.PrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/conversion_complete"
+                app:boxedEdges="all" />
+
+        </LinearLayout>
+
+    </androidx.wear.widget.BoxInsetLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/results_card_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/extra_small_margin"
+        android:layout_marginTop="@dimen/large_margin"
+        android:layout_marginEnd="@dimen/extra_small_margin"
+        android:backgroundTint="@color/black_500"
+        android:padding="@dimen/small_padding"
+        app:cardCornerRadius="50dp"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_safe_end"
+        app:layout_constraintStart_toStartOf="@id/v_guideline_safe_start"
+        app:layout_constraintTop_toTopOf="@id/h_guideline_safe_start">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/small_margin"
+            android:background="@color/black_500">
+
+            <ImageView
+                android:id="@+id/conversion_result_img"
+                android:layout_width="@dimen/views_logo_size"
+                android:layout_height="@dimen/views_logo_size"
+                android:layout_marginStart="@dimen/small_margin"
+                android:background="@color/black_500"
+                android:src="@drawable/length_logo"
+                app:tint="@color/white_700" />
+
+            <TextView
+                android:id="@+id/conversion_result_text"
+                style="@style/Theme.UnitEase.PrimaryText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/small_margin"
+                android:text="@string/length"
+                android:textAlignment="textStart"
+                android:background="@color/black_500"
+                android:textColor="@color/white_700"
+                android:layout_marginEnd="@dimen/small_margin"
+                app:boxedEdges="all" />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+    <androidx.wear.widget.WearableRecyclerView
+        android:id="@+id/results_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/results_card_view"
+        app:layout_constraintStart_toStartOf="@id/v_guideline_safe_start"
+        app:layout_constraintEnd_toEndOf="@id/v_guideline_safe_end"
+        android:layout_marginTop="@dimen/small_margin"
+        android:paddingStart="@dimen/extra_small_padding"
+        android:paddingEnd="@dimen/extra_small_padding"
+        app:layout_constraintBottom_toTopOf="@id/h_guideline_safe_end"
+        />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v_guideline_safe_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.10" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/v_guideline_safe_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.90" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h_guideline_safe_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.17" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/h_guideline_safe_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.77" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
