@@ -4,7 +4,6 @@ package com.finalproject.unitease.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.wear.widget.WearableRecyclerView;
 
@@ -22,11 +20,9 @@ import com.finalproject.unitease.R;
 import com.finalproject.unitease.databinding.ActivityCovnersationOptionsBinding;
 
 import com.finalproject.unitease.model.FavoriteConversions;
-import com.finalproject.unitease.model.FavoritesModel;
 import com.finalproject.unitease.recyclerviewadapter.OptionsRecyclerViewAdapter;
 import com.finalproject.unitease.uicomponent.UnitEaseButton;
 import com.finalproject.unitease.utils.ConversionConfiguration;
-import com.finalproject.unitease.utils.InputLayoutConfiguration;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -98,7 +94,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         int primaryColor = button.getButtonBackgroundColor();
         int secondaryColor = button.getButtonBackgroundTint();
 
-        setStrrokeColor(conversionInputLayout, primaryColor, secondaryColor);
+        setStrokeColor(conversionInputLayout, primaryColor, secondaryColor);
         Log.d(DEBUG_TAG, "init: "+String.valueOf(getColor(primaryColor)) + " " + String.valueOf(getColor(secondaryColor)));
 
         conversionButton.setText(conversionType);
@@ -121,7 +117,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         options = configuration.getOptions();
     }
 
-    private void setStrrokeColor(TextInputLayout conversionInputLayout, int primaryColor, int secondaryColor) {
+    private void setStrokeColor(TextInputLayout conversionInputLayout, int primaryColor, int secondaryColor) {
 
         int[][] states = {
                 new int[]{android.R.attr.state_active},
@@ -200,6 +196,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
             checkButton.setIconResource(R.drawable.heart_filled);
             isConversionButtonFavorite = true;
             favoriteConversions.addFavorite(conversionButton.getText().toString());
+
         } else {
             checkButton.setIconResource(R.drawable.heart);
             isConversionButtonFavorite = false;

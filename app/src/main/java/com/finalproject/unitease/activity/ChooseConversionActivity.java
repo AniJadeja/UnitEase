@@ -43,6 +43,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         //startActivity(new Intent(this, ResultsActivity.class).putExtra("Conversion", "Length"));
         SplashScreen.installSplashScreen(this);
         configureScreen();
@@ -94,13 +95,13 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
 
     // configure the screen based on the screen type
     private void configureScreen() {
+
         isScreenRound = this.getResources().getConfiguration().isScreenRound();
         conversions = new FavoriteConversions(this);
         if (isScreenRound) configureRoundScreen();
         else configureRectangularScreen();
         updateFavoriteConversions();
         isHistory = getIntent().getBooleanExtra("isHistory", false);
-
 
 
         if (!isHistory) {
@@ -145,6 +146,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
 
     // configure the screen for round screens
     private void configureRoundScreen() {
+
         ActivityChooseConversionRoundedBinding binding = ActivityChooseConversionRoundedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         recyclerView = binding.rvChooseConversation;
@@ -180,21 +182,25 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     private void updateFavoriteConversions() {
         setFavoriteConversions(customCategoryButton1, customCategoryButton2);
     }
-
+// **************** Debora Changed here
     private void setFavoriteConversions(MaterialButton button1, MaterialButton button2) {
         Log.d(DEBUG_TAG, "setFavoriteConversions: getting favorite conversions");
         favoriteConversionsList = conversions.getFavorites();
         Log.d(DEBUG_TAG, "setFavoriteConversions: favorite conversions size is " + favoriteConversionsList.size());
-        String button1Text = favoriteConversionsList.get(0).getButtonName();
-        int conversionId = UnitEaseButton.getButtonId(button1Text);
-        UnitEaseButton button = new UnitEaseButton(conversionId);
-        button1.setText(button1Text);
-        button1.setIconResource(button.getButtonIcon());
-        String button2Text = favoriteConversionsList.get(1).getButtonName();
-        conversionId = UnitEaseButton.getButtonId(button2Text);
-        button = new UnitEaseButton(conversionId);
-        button2.setText(button2Text);
-        button2.setIconResource(button.getButtonIcon());
+        if(favoriteConversionsList.size() > 0){
+            String button1Text = favoriteConversionsList.get(0).getButtonName();
+            int conversionId = UnitEaseButton.getButtonId(button1Text);
+            UnitEaseButton button = new UnitEaseButton(conversionId);
+            button1.setText(button1Text);
+            button1.setIconResource(button.getButtonIcon());
+            if(favoriteConversionsList.size() >1 ){
+                String button2Text = favoriteConversionsList.get(1).getButtonName();
+                conversionId = UnitEaseButton.getButtonId(button2Text);
+                button = new UnitEaseButton(conversionId);
+                button2.setText(button2Text);
+                button2.setIconResource(button.getButtonIcon());
+            }
 
+        }
     }
 }

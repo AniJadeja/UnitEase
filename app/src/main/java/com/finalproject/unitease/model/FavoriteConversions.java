@@ -23,25 +23,34 @@ public class FavoriteConversions {
     }
 
     public List<FavoritesModel> addFavorite(String favorite){
+        FavoritesModel model;
          Log.d("DebugUnitEase - Favorites Model : ","Adding " +favorite);
-        String temp = this.favorites.get(0).buttonName;
-        if (favorites.size() == 2 && !isFavorite(favorite)){
-            Log.d("DebugUnitEase - Favorites Model : ","Favorites size is 2 and " + favorite + " is not a favorite");
+
+         if(favorites.isEmpty()){
+             model = new FavoritesModel("0", favorite);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
+             favorites.add(model);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
+             SharedPrefutils.saveFavorites(model, context);
+             SharedPrefutils.saveFavorites(favorites.get(0), context);
+         } else if (favorites.size() == 1 && !isFavorite(favorite)) {
+             model = new FavoritesModel(String.valueOf(favorites.size()),favorite);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
+             favorites.add(model);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
+             SharedPrefutils.saveFavorites(model, context);
+             SharedPrefutils.saveFavorites(favorites.get(1), context);
+         } else if (favorites.size() == 2 && !isFavorite(favorite)) {
+             Log.d("DebugUnitEase - Favorites Model : ","Favorites size is 2 and " + favorite + " is not a favorite");
             favorites.clear();
-        } else if (isFavorite(favorite)) {
-            Log.d("DebugUnitEase - Favorites Model : ","Favorites size is 2 and " + favorite + " is a favorite");
-            return null;
-        }
-        FavoritesModel model = new FavoritesModel("0", favorite);
-        Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
-        favorites.add(model);
-        Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
-        model = new FavoritesModel(String.valueOf(favorites.size()),temp);
-        Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + temp);
-        favorites.add(model);
-        Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + temp);
-        SharedPrefutils.saveFavorites(model, context);
-        SharedPrefutils.saveFavorites(favorites.get(0), context);
+             model = new FavoritesModel("0", favorite);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
+             favorites.add(model);
+             Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
+             SharedPrefutils.saveFavorites(model, context);
+             SharedPrefutils.saveFavorites(favorites.get(0), context);
+         }
+
         return favorites;
     }
 
