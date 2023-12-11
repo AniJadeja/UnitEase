@@ -39,10 +39,10 @@ public class ChooseActivityType extends AppCompatActivity implements View.OnClic
         if (v == conversionButton){
             Log.d("MeuApp", "choose conversion ");
             startActivity(new Intent(this, ChooseConversionActivity.class).putExtra("isHistory", false));
-            finish();
+//            finish();
         } else if (v == historyButton){
             startActivity(new Intent(this, ChooseConversionActivity.class).putExtra("isHistory", true));
-            finish();
+//            finish();
         }
     }
 }
