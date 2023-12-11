@@ -3,7 +3,7 @@ package com.finalproject.unitease.model;
 import android.content.Context;
 import android.util.Log;
 
-import com.finalproject.unitease.utils.SharedPrefutils;
+import com.finalproject.unitease.utils.SharedPrefUtils;
 
 import java.util.List;
 
@@ -11,48 +11,52 @@ public class FavoriteConversions {
      private List<FavoritesModel> favorites;
      private final Context context;
 
+    boolean isRight = false;
+
 
      public FavoriteConversions( Context context){
-         favorites = SharedPrefutils.getFavorites("FAVORITES", context);;
+         favorites = SharedPrefUtils.getFavorites("FAVORITES", context);;
          this.context = context;
      }
 
     public List<FavoritesModel> getFavorites(){
-         favorites = SharedPrefutils.getFavorites("FAVORITES", context);
+         favorites = SharedPrefUtils.getFavorites("FAVORITES", context);
+
         return favorites;
     }
 
-    public List<FavoritesModel> addFavorite(String favorite){
+    public List<FavoritesModel> addFavorite(String favorite) {
         FavoritesModel model;
-         Log.d("DebugUnitEase - Favorites Model : ","Adding " +favorite);
 
-         if(favorites.isEmpty()){
-             model = new FavoritesModel("0", favorite);
-             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
-             favorites.add(model);
+        if (favorites.isEmpty()) {
+            model = new FavoritesModel("0", favorite, false);
+            Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
+            favorites.add(model);
              Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
-             SharedPrefutils.saveFavorites(model, context);
-             SharedPrefutils.saveFavorites(favorites.get(0), context);
-         } else if (favorites.size() == 1 && !isFavorite(favorite)) {
-             model = new FavoritesModel(String.valueOf(favorites.size()),favorite);
-             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
-             favorites.add(model);
-             Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
-             SharedPrefutils.saveFavorites(model, context);
-             SharedPrefutils.saveFavorites(favorites.get(1), context);
-         } else if (favorites.size() == 2 && !isFavorite(favorite)) {
-             Log.d("DebugUnitEase - Favorites Model : ","Favorites size is 2 and " + favorite + " is not a favorite");
-            favorites.clear();
-             model = new FavoritesModel("0", favorite);
-             Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
-             favorites.add(model);
-             Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
-             SharedPrefutils.saveFavorites(model, context);
-             SharedPrefutils.saveFavorites(favorites.get(0), context);
-         }
+            SharedPrefUtils.saveFavorites(favorites, context);
+        } else if (favorites.size() == 1 && !isFavorite(favorite)) {
+            model = new FavoritesModel("1", favorite, true);
+            Log.d("DebugUnitEase - Favorites Model : Adding ","Model created for " + favorite);
+            favorites.add(model);
+            Log.d("DebugUnitEase - Favorites Model : Adding ","Model added for " + favorite);
+            SharedPrefUtils.saveFavorites(favorites, context);
+        } else if (favorites.size() == 2 && !isFavorite(favorite)) {
+            if (favorites.get(1).isLastRight()){
+                favorites.get(1).setLastRight(false);
+                model = new FavoritesModel("0", favorite,false);
+                favorites.set(0, model);
+            }else {
+                model = new FavoritesModel("1", favorite,true);
+                favorites.set(1, model);
+            }
+            SharedPrefUtils.saveFavorites(favorites, context);
+
+        }
+
 
         return favorites;
     }
+
 
     public boolean isFavorite(String favorite){
         for (FavoritesModel model: favorites){

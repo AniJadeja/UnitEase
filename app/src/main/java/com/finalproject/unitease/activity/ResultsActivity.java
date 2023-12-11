@@ -4,20 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.wear.widget.WearableRecyclerView;
 
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.finalproject.unitease.R;
 import com.finalproject.unitease.databinding.ActivityResultsBinding;
 import com.finalproject.unitease.model.ConversionModel;
 import com.finalproject.unitease.recyclerviewadapter.ResultsRecyclerViewAdapter;
 import com.finalproject.unitease.uicomponent.UnitEaseButton;
 import com.finalproject.unitease.utils.ConversionConfiguration;
-import com.finalproject.unitease.utils.SharedPrefutils;
+import com.finalproject.unitease.utils.SharedPrefUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -54,10 +52,25 @@ public class ResultsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         if (getIntent().getBooleanExtra("isHistory", false)){
-            // TODO : get the list from shared preferences
+            Set<String> conversionsSet = new LinkedHashSet<>();
+            conversionsSet = SharedPrefUtils.getConversions(type,this);
+
+            for (String conversionString : conversionsSet) {
+                String[] parts = conversionString.split(":");
+
+                if (parts.length == 2) {
+                    String option = parts[0];
+                    String value = parts[1];
+                    ConversionModel conversion = new ConversionModel( 0,option, value);
+                    conversions.add(conversion);
+                } else {
+                    Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
+                }
+            }
         }
         else {
-        conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));}
+            conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));
+        }
 
         Log.d(DEBUG_TAG, "onStart: list received " + conversions.size());
         setupRecyclerView();
@@ -66,9 +79,7 @@ public class ResultsActivity extends AppCompatActivity {
             conversionsSet.add(conversion.getOption()+":"+conversion.getValue());
         }
 
-        // TODO : save the list to shared preferences
-        // This one is not working
-        SharedPrefutils.saveConversions(type, conversionsSet, this);
+        SharedPrefUtils.saveConversions(type, conversionsSet, this); //********************
     }
 
     private void setupRecyclerView() {
