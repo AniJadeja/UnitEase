@@ -26,6 +26,7 @@ public class FavoriteConversions {
     }
 
     public List<FavoritesModel> addFavorite(String favorite) {
+
         FavoritesModel model;
 
         if (favorites.isEmpty()) {
