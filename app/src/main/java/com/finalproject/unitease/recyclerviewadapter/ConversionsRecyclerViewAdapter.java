@@ -17,11 +17,12 @@ import com.google.android.material.button.MaterialButton;
 
 public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<ConversionsRecyclerViewAdapter.ViewHolder> {
 
+    // Tags for logging
     private static final String FLOW_TAG = "Flow - ConversionsRecyclerViewAdapter";
     private static final String DEBUG_TAG = "DebugUnitEase - ConversionsRecyclerViewAdapter";
+
     private final Context context;
     private final Boolean isScreenRound;
-
 
     // Callback interface
     public interface ButtonClickListener {
@@ -31,8 +32,7 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
     // Callback instance
     private ButtonClickListener buttonClickListener;
 
-
-
+    // Constructor
     public ConversionsRecyclerViewAdapter(Context context, Boolean isScreenRound, ButtonClickListener buttonClickListener) {
         this.context = context;
         this.isScreenRound = isScreenRound;
@@ -62,20 +62,18 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
         holder.bindView(position, isScreenRound);
     }
 
-
-
-
     @Override
     public int getItemCount() {
         return isScreenRound ? 2 : 1;
     }
 
+    // ViewHolder class for each item in the RecyclerView
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private LayoutAllOptionsRoundedBinding roundBinding;
         private LayoutAllOptionsRectangularBinding rectangularBinding;
 
-
+        // Constructor for the ViewHolder
         public ViewHolder(@NonNull View itemView, LayoutAllOptionsRoundedBinding binding) {
             super(itemView);
             this.roundBinding = binding;
@@ -86,17 +84,16 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
             this.rectangularBinding = binding;
         }
 
+        // Method to bind the view based on the screen type
         public void bindView(int position, Boolean isScreenRound) {
-
             if (isScreenRound) {
                 bindRoundView(position);
             } else {
                 bindRectangularView();
             }
-
-
         }
 
+        // Method to configure the button based on the UnitEaseButton
         private void configureButton(UnitEaseButton unitEaseButton, MaterialButton button) {
             button.setText(unitEaseButton.getButtonName());
             button.setBackgroundColor(context.getColor(unitEaseButton.getButtonBackgroundColor()));
@@ -104,10 +101,9 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
             button.setOnClickListener(this);
         }
 
-
+        // Method to bind the rectangular view with buttons
         private void bindRectangularView() {
             for (int i = 0; i <= 5; i++) {
-
                 UnitEaseButton unitEaseButton = new UnitEaseButton(i);
                 switch (i) {
                     case 0:
@@ -130,9 +126,9 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
                         break;
                 }
             }
-
         }
 
+        // Method to bind the round view with buttons
         private void bindRoundView(int position) {
             int lastButton = position * 3;
             configureButton(new UnitEaseButton(lastButton), roundBinding.button0);
@@ -147,18 +143,16 @@ public class ConversionsRecyclerViewAdapter extends RecyclerView.Adapter<Convers
 
             if (position == 1) {
                 Log.d(FLOW_TAG, "bindRoundView: round view bound ");
-
             }
-
         }
 
+        // Click listener for button clicks
         @Override
         public void onClick(View v) {
             Button button = (Button) v;
             String buttonText = button.getText().toString();
             // callback should happen here
             buttonClickListener.onButtonClick(buttonText);
-
         }
     }
 }

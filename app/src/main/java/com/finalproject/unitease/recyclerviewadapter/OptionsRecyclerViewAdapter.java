@@ -19,13 +19,13 @@ import com.google.android.material.button.MaterialButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
+    // Tags for logging
     private static final String FLOW_TAG = "Flow - ConversionsOptionsRecyclerViewAdapter";
     private static final String DEBUG_TAG = "DebugUnitEase - ConversionsOptionsRecyclerViewAdapter";
-    private final Context context;
 
+    private final Context context;
 
     // Callback interface
     public interface OnOptionSelectedListener {
@@ -36,9 +36,10 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private OnOptionSelectedListener onOptionSelectedListener;
     private List<String> options;
     private List<MaterialButton> buttons;
-    int primaryColor, secondaryColor;
+    private int primaryColor, secondaryColor;
 
-    public OptionsRecyclerViewAdapter(Context context,int primaryColor, int secondaryColor , List<String> options, OnOptionSelectedListener onOptionSelectedListener) {
+    // Constructor
+    public OptionsRecyclerViewAdapter(Context context, int primaryColor, int secondaryColor, List<String> options, OnOptionSelectedListener onOptionSelectedListener) {
         this.context = context;
         this.onOptionSelectedListener = onOptionSelectedListener;
         this.options = options;
@@ -57,8 +58,8 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        ViewHolder viewHolder = (ViewHolder)holder;
-        viewHolder.bindViews(position, primaryColor,secondaryColor);
+        ViewHolder viewHolder = (ViewHolder) holder;
+        viewHolder.bindViews(position, primaryColor, secondaryColor);
     }
 
     @Override
@@ -66,18 +67,21 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return options.size();
     }
 
-    class  ViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+    // ViewHolder class for each item in the RecyclerView
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private final LayoutConversionOptionsBinding binding;
         private MaterialButton selectedButton;
 
+        // Constructor for the ViewHolder
         public ViewHolder(@NonNull LayoutConversionOptionsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
+        // Method to bind views for each option in the RecyclerView
         public void bindViews(int position, int primaryColor, int secondaryColor) {
-            Log.d(DEBUG_TAG, "bindViews: secondary color "+ secondaryColor);
+            Log.d(DEBUG_TAG, "bindViews: secondary color " + secondaryColor);
             MaterialButton button = (MaterialButton) binding.btnConversionOption;
             button.setText(options.get(position));
             button.setTextColor(context.getColor(primaryColor));
@@ -87,9 +91,10 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             buttons.add(button);
         }
 
+        // Click listener for option clicks
         @Override
         public void onClick(View v) {
-            for(MaterialButton button: buttons){
+            for (MaterialButton button : buttons) {
                 button.setBackgroundTintList(ColorStateList.valueOf(context.getColor(R.color.black_700)));
             }
             MaterialButton button = (MaterialButton) v;
@@ -99,6 +104,4 @@ public class OptionsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             onOptionSelectedListener.onOptionSelected(buttonText);
         }
     }
-
-
 }

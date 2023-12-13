@@ -13,13 +13,19 @@ import com.finalproject.unitease.model.ConversionModel;
 
 import java.util.List;
 
-public class ResultsRecyclerViewAdapter extends RecyclerView.Adapter<ResultsRecyclerViewAdapter.ViewHolder>{
+public class ResultsRecyclerViewAdapter extends RecyclerView.Adapter<ResultsRecyclerViewAdapter.ViewHolder> {
 
+    // List of ConversionModel objects
     private List<ConversionModel> conversions;
-    Context context;
-    int color;
 
-    public ResultsRecyclerViewAdapter(List<ConversionModel> conversions, int color, Context context){
+    // Context to be used for resource access
+    private Context context;
+
+    // Color for styling
+    private int color;
+
+    // Constructor
+    public ResultsRecyclerViewAdapter(List<ConversionModel> conversions, int color, Context context) {
         this.conversions = conversions;
         this.context = context;
         this.color = color;
@@ -28,6 +34,7 @@ public class ResultsRecyclerViewAdapter extends RecyclerView.Adapter<ResultsRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Inflating the layout for each item in the RecyclerView
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         LayoutResultsBinding binding = LayoutResultsBinding.inflate(inflater, parent, false);
         return new ViewHolder(binding);
@@ -35,33 +42,35 @@ public class ResultsRecyclerViewAdapter extends RecyclerView.Adapter<ResultsRecy
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            holder.bindView(conversions.get(position));
+        // Binding data to the ViewHolder
+        holder.bindView(conversions.get(position));
     }
-
 
     @Override
     public int getItemCount() {
+        // Returning the total number of items in the RecyclerView
         return conversions.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    // ViewHolder class for each item in the RecyclerView
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
+        // Binding object for the layout
         LayoutResultsBinding binding;
 
-
+        // Constructor for the ViewHolder
         public ViewHolder(@NonNull LayoutResultsBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        public void bindView(ConversionModel conversions){
+        // Method to bind data to the views in the ViewHolder
+        public void bindView(ConversionModel conversions) {
             binding.hypen.setTextColor(context.getColor(color));
             binding.option.setTextColor(context.getColor(color));
             binding.value.setTextColor(context.getColor(color));
             binding.option.setText(conversions.getOption());
             binding.value.setText(conversions.getValue());
         }
-
-
     }
 }

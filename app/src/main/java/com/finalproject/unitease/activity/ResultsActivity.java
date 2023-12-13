@@ -43,45 +43,59 @@ public class ResultsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflating the layout using view binding
         resultsBinding = ActivityResultsBinding.inflate(getLayoutInflater());
         setContentView(resultsBinding.getRoot());
+
+        // Initialize UI components and retrieve intent data
         init();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        if (getIntent().getBooleanExtra("isHistory", false)){
-            Set<String> conversionsSet = new LinkedHashSet<>();
-            conversionsSet = SharedPrefUtils.getConversions(type,this);
 
-            for (String conversionString : conversionsSet) {
-                String[] parts = conversionString.split(":");
-
-                if (parts.length == 2) {
-                    String option = parts[0];
-                    String value = parts[1];
-                    ConversionModel conversion = new ConversionModel( 0,option, value);
-                    conversions.add(conversion);
-                } else {
-                    Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
-                }
-            }
-        }
-        else {
-            conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));
+        // Check if it's a history view
+        if (getIntent().getBooleanExtra("isHistory", false)) {
+            // Load historical conversions from SharedPreferences
+            loadHistoricalConversions();
+        } else {
+            // Load conversions based on the provided type, unit, and value
+            loadConversions();
         }
 
-        Log.d(DEBUG_TAG, "onStart: list received " + conversions.size());
+        // Set up RecyclerView with the loaded conversions
         setupRecyclerView();
-        Set<String> conversionsSet = new LinkedHashSet<>();
-        for(ConversionModel conversion : conversions) {
-            conversionsSet.add(conversion.getOption()+":"+conversion.getValue());
-        }
 
-        SharedPrefUtils.saveConversions(type, conversionsSet, this); //********************
+        // Save the current conversions to SharedPreferences
+        saveCurrentConversionsToSharedPreferences();
     }
 
+    // Load historical conversions from SharedPreferences
+    private void loadHistoricalConversions() {
+        Set<String> conversionsSet = SharedPrefUtils.getConversions(type, this);
+
+        for (String conversionString : conversionsSet) {
+            String[] parts = conversionString.split(":");
+
+            if (parts.length == 2) {
+                String option = parts[0];
+                String value = parts[1];
+                ConversionModel conversion = new ConversionModel(0, option, value);
+                conversions.add(conversion);
+            } else {
+                Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
+            }
+        }
+    }
+
+    // Load conversions based on the provided type, unit, and value
+    private void loadConversions() {
+        conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));
+    }
+
+    // Set up the RecyclerView to display conversions
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -90,13 +104,16 @@ public class ResultsActivity extends AppCompatActivity {
         wearableRecyclerView.setEdgeItemsCenteringEnabled(false);
         wearableRecyclerView.setLayoutManager(manager);
 
+        // Create and set up the adapter for the RecyclerView
         ResultsRecyclerViewAdapter adapter = new ResultsRecyclerViewAdapter(conversions,
                 new UnitEaseButton(UnitEaseButton.getButtonId(type)).getButtonBackgroundColor(),
                 this);
         wearableRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();    }
+        adapter.notifyDataSetChanged();
+    }
 
-    private void init(){
+    // Initialize UI components and set initial values
+    private void init() {
         String conversionType = getIntent().getStringExtra("Conversion");
         type = conversionType;
         value = getIntent().getStringExtra("ConversionValue");
@@ -110,14 +127,23 @@ public class ResultsActivity extends AppCompatActivity {
         wearableRecyclerView = resultsBinding.resultsList;
     }
 
-    private void bindViews(String conversion, int imageResource, int color){
+    // Bind views with conversion-related information
+    private void bindViews(String conversion, int imageResource, int color) {
         conversionResultImage = resultsBinding.conversionResultImg;
         conversionResultText = resultsBinding.conversionResultText;
         conversionResultImage.setImageTintList(ColorStateList.valueOf(getColor(color)));
         conversionResultText.setTextColor(getColor(color));
         conversionResultText.setText(conversion);
         conversionResultImage.setImageResource(imageResource);
+    }
 
+    // Save the current conversions to SharedPreferences
+    private void saveCurrentConversionsToSharedPreferences() {
+        Set<String> conversionsSet = new LinkedHashSet<>();
+        for (ConversionModel conversion : conversions) {
+            conversionsSet.add(conversion.getOption() + ":" + conversion.getValue());
+        }
 
+        SharedPrefUtils.saveConversions(type, conversionsSet, this);
     }
 }

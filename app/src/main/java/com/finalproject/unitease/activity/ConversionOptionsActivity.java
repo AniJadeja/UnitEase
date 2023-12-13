@@ -1,6 +1,5 @@
 package com.finalproject.unitease.activity;
 
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -18,7 +17,6 @@ import androidx.wear.widget.WearableRecyclerView;
 
 import com.finalproject.unitease.R;
 import com.finalproject.unitease.databinding.ActivityCovnersationOptionsBinding;
-
 import com.finalproject.unitease.model.FavoriteConversions;
 import com.finalproject.unitease.recyclerviewadapter.OptionsRecyclerViewAdapter;
 import com.finalproject.unitease.uicomponent.UnitEaseButton;
@@ -50,15 +48,17 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Inflating the layout using view binding
         optionsBinding = ActivityCovnersationOptionsBinding.inflate(getLayoutInflater());
         setContentView(optionsBinding.getRoot());
+
+        // Initializing UI components and setting up the RecyclerView
         init();
         setupRecyclerView();
     }
 
-
-    // ----------------------------------------- Overridden Methods ----------------------------------------- //
-
+    // Handle touch events to dismiss the keyboard when tapping outside an EditText
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -76,8 +76,28 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         return super.dispatchTouchEvent(event);
     }
 
-    // ----------------------------------------- User Defined Methods ----------------------------------------- //
+    // Handle option selection from the RecyclerView
+    @Override
+    public void onOptionSelected(String buttonText) {
+        Log.d(DEBUG_TAG, "onOptionSelected: selected option is " + buttonText);
+        unit = buttonText;
+    }
 
+    // Handle button clicks
+    @Override
+    public void onClick(View v) {
+        if (v == checkButton) {
+            // Handle favorite button click
+            if (!isConversionButtonFavorite) {
+                setFavoriteButton(true);
+            }
+        } else if (v == getConversionButton) {
+            // Handle "Get Conversions" button click
+            handleGetConversionsButtonClick();
+        }
+    }
+
+    // Initialize UI components and set up the layout
     private void init() {
         recyclerView = optionsBinding.optionsRecyclerView;
         checkButton = optionsBinding.checkboxButton;
@@ -87,6 +107,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         conversionButton.setClickable(false);
         getConversionButton = optionsBinding.getConversionsButton;
 
+        // Retrieve conversion information from the intent
         String getConversionButtonText = getString(R.string.get) + getIntent().getStringExtra("Conversion") + getString(R.string.s);
         String conversionType = getIntent().getStringExtra("Conversion");
         conversionId = UnitEaseButton.getButtonId(conversionType);
@@ -94,31 +115,32 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         int primaryColor = button.getButtonBackgroundColor();
         int secondaryColor = button.getButtonBackgroundTint();
 
+        // Set stroke color for TextInputLayout based on button colors
         setStrokeColor(conversionInputLayout, primaryColor, secondaryColor);
-        Log.d(DEBUG_TAG, "init: "+String.valueOf(getColor(primaryColor)) + " " + String.valueOf(getColor(secondaryColor)));
 
+        // Set up UI components with conversion information
         conversionButton.setText(conversionType);
         conversionButton.setBackgroundColor(getColor(primaryColor));
         conversionButton.setIconResource(button.getButtonIcon());
         getConversionButton.setBackgroundColor(getColor(primaryColor));
         getConversionButton.setText(getConversionButtonText);
-
         conversionEditText.setTextColor(getColor(button.getButtonBackgroundColor()));
 
+        // Set up the favorite button
         checkButton.setIconTint(ColorStateList.valueOf(getColor(primaryColor)));
         checkButton.setIconResource(R.drawable.heart);
         favoriteConversions = new FavoriteConversions(this);
         setFavoriteButton(favoriteConversions.isFavorite(conversionType));
         checkButton.setStateListAnimator(null);
         checkButton.setOnClickListener(this);
-        getConversionButton.setOnClickListener(this);
 
+        // Retrieve conversion options from the configuration
         ConversionConfiguration configuration = new ConversionConfiguration(conversionId);
         options = configuration.getOptions();
     }
 
+    // Set stroke color for TextInputLayout based on button colors
     private void setStrokeColor(TextInputLayout conversionInputLayout, int primaryColor, int secondaryColor) {
-
         int[][] states = {
                 new int[]{android.R.attr.state_active},
                 new int[]{android.R.attr.state_focused},
@@ -140,10 +162,9 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         ColorStateList colorState = new ColorStateList(states, colors);
         conversionInputLayout.setBoxStrokeColorStateList(colorState);
         conversionInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(getColor(primaryColor)));
-
-
     }
 
+    // Set up the RecyclerView to display conversion options
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setEdgeItemsCenteringEnabled(true);
@@ -152,55 +173,47 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onOptionSelected(String buttonText) {
-        Log.d(DEBUG_TAG, "onOptionSelected: selected option is " + buttonText);
-        unit = buttonText;
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        if (v == checkButton) {
-            if (!isConversionButtonFavorite) {
-                setFavoriteButton(true);
-            }
-        } else if (v == getConversionButton) {
-            if (conversionEditText.getText().toString().isEmpty()) {
-                conversionInputLayout.setError(getString(R.string.enter_value));
-                conversionInputLayout.setErrorEnabled(true);
-                return;
-            }
-            if (unit == null) {
-                conversionInputLayout.setError(getString(R.string.select_unit));
-                conversionInputLayout.setErrorEnabled(true);
-
-                return;
-            }
-            conversionInputLayout.setErrorEnabled(false);
-            Intent intent = new Intent(this, ResultsActivity.class);
-            intent.putExtra("Conversion", conversionButton.getText().toString());
-            intent.putExtra("ConversionValue", conversionEditText.getText().toString());
-            intent.putExtra("Unit", unit);
-            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions : "+ conversionButton.getText().toString());
-            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions Value : "+ conversionEditText.getText().toString());
-            Log.d(DEBUG_TAG, "onClick: GetConversions Button => Unit : "+ unit);
-            startActivity(intent);
-
+    // Handle "Get Conversions" button click
+    private void handleGetConversionsButtonClick() {
+        if (conversionEditText.getText().toString().isEmpty()) {
+            // Show error if the conversion value is empty
+            conversionInputLayout.setError(getString(R.string.enter_value));
+            conversionInputLayout.setErrorEnabled(true);
+            return;
         }
 
+        if (unit == null) {
+            // Show error if no unit is selected
+            conversionInputLayout.setError(getString(R.string.select_unit));
+            conversionInputLayout.setErrorEnabled(true);
+            return;
+        }
+
+        // Clear any previous error messages
+        conversionInputLayout.setErrorEnabled(false);
+
+        // Start ResultsActivity with conversion details
+        Intent intent = new Intent(this, ResultsActivity.class);
+        intent.putExtra("Conversion", conversionButton.getText().toString());
+        intent.putExtra("ConversionValue", conversionEditText.getText().toString());
+        intent.putExtra("Unit", unit);
+
+        Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions : " + conversionButton.getText().toString());
+        Log.d(DEBUG_TAG, "onClick: GetConversions Button => Conversions Value : " + conversionEditText.getText().toString());
+        Log.d(DEBUG_TAG, "onClick: GetConversions Button => Unit : " + unit);
+
+        startActivity(intent);
     }
 
-    private void setFavoriteButton( Boolean isFavorite) {
+    // Set the state of the favorite button
+    private void setFavoriteButton(Boolean isFavorite) {
         if (isFavorite) {
             checkButton.setIconResource(R.drawable.heart_filled);
             isConversionButtonFavorite = true;
             favoriteConversions.addFavorite(conversionButton.getText().toString());
-
         } else {
             checkButton.setIconResource(R.drawable.heart);
             isConversionButtonFavorite = false;
         }
-
     }
 }

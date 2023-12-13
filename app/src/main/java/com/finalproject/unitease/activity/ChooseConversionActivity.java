@@ -25,18 +25,23 @@ import com.google.android.material.button.MaterialButton;
 import java.util.List;
 
 public class ChooseConversionActivity extends AppCompatActivity implements View.OnClickListener, ConversionsRecyclerViewAdapter.ButtonClickListener {
-
     private static final String FLOW_TAG = "Flow - ChooseConversionActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ChooseConversionActivity";
     private static boolean isScrolled = false;
 
+    // UI components
     private WearableRecyclerView recyclerView;
     private ImageView scrollButton;
+    private MaterialButton customCategoryButton1, customCategoryButton2;
+
+    // RecyclerView components
     private LinearLayoutManager layoutManager;
     private LinearSmoothScroller linearSmoothScroller;
-    private MaterialButton customCategoryButton1, customCategoryButton2;
+
+    // Flags to determine screen type and history state
     private Boolean isScreenRound, isHistory;
 
+    // Data components
     FavoriteConversions conversions;
     List<FavoritesModel> favoriteConversionsList;
 
@@ -44,30 +49,27 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //startActivity(new Intent(this, ResultsActivity.class).putExtra("Conversion", "Length"));
+        // Installing SplashScreen
         SplashScreen.installSplashScreen(this);
+
+        // Configuring the screen based on its type (round or rectangular)
         configureScreen();
     }
-
 
     @Override
     protected void onStart() {
         super.onStart();
+        // Setting up the RecyclerView's LayoutManager
         setupLayoutManager();
-
     }
-
 
     @Override
     protected void onResume() {
         super.onResume();
+        // Setting up the RecyclerView and updating favorite conversions
         setUpRecyclerView();
         updateFavoriteConversions();
     }
-
-
-
-    // ----------------------------------------- Overridden Methods ----------------------------------------- //
 
     @Override
     public void onClick(View v) {
@@ -90,8 +92,6 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
             startActivity(new Intent(this, ConversionOptionsActivity.class).putExtra("Conversion", customCategoryButton2.getText()));
         }
     }
-
-    // ----------------------------------------- Defined Methods ----------------------------------------- //
 
     // configure the screen based on the screen type
     private void configureScreen() {
@@ -118,6 +118,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     }
 
     // set up the RecyclerView
+    // Set up the RecyclerView
     private void setUpRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setEdgeItemsCenteringEnabled(true);
@@ -125,45 +126,47 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         ConversionsRecyclerViewAdapter adapter = new ConversionsRecyclerViewAdapter(getApplicationContext(), isScreenRound, this);
         recyclerView.setAdapter(adapter);
         recyclerView.suppressLayout(true);
-        Log.d(FLOW_TAG, "setUpRecyclerView: RecyclerView set up");
+        // Set initial rotation and scrolling state for the scroll button
         scrollButton.setRotation(180f);
         isScrolled = false;
     }
 
-    // set up the LayoutManager for the RecyclerView and the LinearSmoothScroller for scrolling
+    // Set up the LayoutManager for the RecyclerView and the LinearSmoothScroller for scrolling
     private void setupLayoutManager() {
         layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         linearSmoothScroller = new LinearSmoothScroller(recyclerView.getContext()) {
             @Override
             protected float calculateSpeedPerPixel(DisplayMetrics displayMetrics) {
-
                 return (float) 300 / displayMetrics.densityDpi;
             }
         };
-        Log.d(FLOW_TAG, "setupLayoutManager: layoutManager and linearSmoothScroller set up");
     }
 
-    // configure the screen for round screens
+    // Configure the screen layout for round screens
     private void configureRoundScreen() {
-
+        // Inflate the round screen layout
         ActivityChooseConversionRoundedBinding binding = ActivityChooseConversionRoundedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        // Initialize UI components
         recyclerView = binding.rvChooseConversation;
         scrollButton = binding.scrollButton;
         customCategoryButton1 = binding.customCategoryButton1;
         customCategoryButton2 = binding.customCategoryButton2;
-        binding.scrollButton.setOnClickListener(this);
-        Log.d(FLOW_TAG, "configureRoundScreen: round screen configured");
 
+        // Set click listener for the scroll button
+        binding.scrollButton.setOnClickListener(this);
     }
 
-    // configure the screen for rectangular screens
+    // Configure the screen layout for rectangular screens
     private void configureRectangularScreen() {
+        // Inflate the rectangular screen layout
         ActivityChooseConversionRectangularBinding bindingRectangular = ActivityChooseConversionRectangularBinding.inflate(getLayoutInflater());
         setContentView(bindingRectangular.getRoot());
+
+        // Initialize UI components
         recyclerView = bindingRectangular.rvChooseConversation;
-        Log.d(FLOW_TAG, "configureRectangularScreen: rectangular screen configured");
         customCategoryButton1 = bindingRectangular.customCategoryButton1;
         customCategoryButton2 = bindingRectangular.customCategoryButton2;
     }
@@ -179,28 +182,29 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
             startActivity(new Intent(this, ConversionOptionsActivity.class).putExtra("Conversion", buttonText));
 
     }
+    // Update the favorite conversions on the custom category buttons
     private void updateFavoriteConversions() {
         setFavoriteConversions(customCategoryButton1, customCategoryButton2);
     }
-// **************** Debora Changed here
+
+    // Set the favorite conversions on the custom category buttons
     private void setFavoriteConversions(MaterialButton button1, MaterialButton button2) {
         Log.d(DEBUG_TAG, "setFavoriteConversions: getting favorite conversions");
         favoriteConversionsList = conversions.getFavorites();
         Log.d(DEBUG_TAG, "setFavoriteConversions: favorite conversions size is " + favoriteConversionsList.size());
-        if(favoriteConversionsList.size() > 0){
+        if (favoriteConversionsList.size() > 0) {
             String button1Text = favoriteConversionsList.get(0).getButtonName();
             int conversionId = UnitEaseButton.getButtonId(button1Text);
             UnitEaseButton button = new UnitEaseButton(conversionId);
             button1.setText(button1Text);
             button1.setIconResource(button.getButtonIcon());
-            if(favoriteConversionsList.size() >1 ){
+            if (favoriteConversionsList.size() > 1) {
                 String button2Text = favoriteConversionsList.get(1).getButtonName();
                 conversionId = UnitEaseButton.getButtonId(button2Text);
                 button = new UnitEaseButton(conversionId);
                 button2.setText(button2Text);
                 button2.setIconResource(button.getButtonIcon());
             }
-
         }
     }
 }

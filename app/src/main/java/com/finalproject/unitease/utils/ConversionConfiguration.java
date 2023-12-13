@@ -8,9 +8,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConversionConfiguration {
+    // List of available options for each conversion type
     private final List<String[]> options;
+
+    // Index representing the current conversion type
     private final int id;
+
+    // Debug tag for logging
     private static final String DEBUG_TAG = "DebugUnitEase - ConversionConfiguration";
+
+    // Constructor to initialize options and id based on the provided id
     public ConversionConfiguration(int id) {
         this.options = new ArrayList<>();
         this.options.add(LENGTH_UNITS);
@@ -22,28 +29,28 @@ public class ConversionConfiguration {
         this.id = id;
     }
 
-
+    // Arrays defining the units for each conversion type
     private static final String[] LENGTH_UNITS = {"Centimeters", "Inches", "Feet", "Meters", "Kilometers", "Miles"};
-
     private static final String[] WEIGHT_UNITS = {"Grams", "Ounces", "Pounds", "Kilograms", "Tons"};
-
     private static final String[] VOLUME_UNITS = {"Milliliters", "Fluid Ounces", "Liters", "Gallons"};
-
     private static final String[] SPEED_UNITS = {"Kilometers per Hour", "Miles per Hour"};
-
     private static final String[] AREA_UNITS = {"Square Feet", "Square Meters", "Square Kilometers", "Hectares", "Acres"};
-
     private static final String[] TEMP_UNITS = {"Celsius", "Fahrenheit"};
 
-
+    // Getter method to retrieve the options based on the current conversion type
     public String[] getOptions() {
         return options.get(id);
     }
 
+    // Method to get conversions based on the provided type, unit, and value
     public static List<ConversionModel> getConversions(String type, String unit, double value) {
         Log.d(DEBUG_TAG, "getConversions: type " + type + " unit " + unit + " value " + value);
         List<ConversionModel> conversions = new ArrayList<>();
+
+        // Switch statement to handle different conversion types
+
         switch (type.toLowerCase()) {
+            // for each and every case type we are checking the values and assign it.Here it is length so we are converting all the length related values
             case "length": {
                 double centimeters = 0;
                 double inches = 0;
@@ -52,7 +59,6 @@ public class ConversionConfiguration {
                 double kilometers = 0;
                 double miles = 0;
                 switch (unit.toLowerCase()) {
-
                     case "centimeters":
                         centimeters = value;
                         inches = roundUpToFiveDecimals(convertCentimetersToInches(value));
@@ -309,98 +315,97 @@ public class ConversionConfiguration {
             }
             break;
         }
-
         return conversions;
     }
-
+    //Method for converting acres to sq ft
     private static double convertAcresToSquareFeet(double value) {
         return value * 43560;
     }
-
+    //Method for converting hectares to sq ft
     private static double convertHectaresToSquareFeet(double value) {
         return value * 107639;
     }
-
+    //Method for converting sqkm to sq ft
     private static double convertSquareKilometersToSquareFeet(double value) {
         return value * 10763910.4;
     }
-
+    //Method for converting sqm to sq ft
     private static double convertSquareMetersToSquareFeet(double value) {
         return value * 10.7639;
     }
-
+    //Method for converting sqft to acres
     private static double convertSquareFeetToAcres(double value) {
         return value * 0.0000229568;
     }
-
+    //Method for converting sqft to hectares
     private static double convertSquareFeetToHectares(double value) {
         return value * 0.0000092903;
     }
-
+    //Method for converting sqft to sqkm
     private static double convertSquareFeetToSquareKilometers(double value) {
         return value * 0.000000092903;
     }
-
+    //Method for converting sqft to sqm
     private static double convertSquareFeetToSquareMeters(double value) {
         return value * 0.092903;
     }
-
+    //Method for converting mph to kmph
     private static double convertMilesPerHourToKilometersPerHour(double value) {
         return value * 1.60934;
     }
-
+    //Method for converting kmph to mph
     private static double convertKilometersPerHourToMilesPerHour(double value) {
         return value * 0.621371;
     }
-
+    //Method for converting gallons to ml
     private static double convertGallonsToMilliliters(double value) {
         return value * 3785.41;
     }
-
+    //Method for converting litre to ml
     private static double convertLitersToMilliliters(double value) {
         return value * 1000;
     }
-
+    //Method for converting ounce to ml
     private static double convertFluidOuncesToMilliliters(double value) {
         return value * 29.5735;
     }
-
+    //Method for converting ml to gallons
     private static double convertMillilitersToGallons(double value) {
         return value * 0.000264172;
     }
-
+    //Method for converting ml to litre
     private static double convertMillilitersToLiters(double value) {
         return value * 0.001;
     }
-
+    //Method for converting ml to ounce
     private static double convertMillilitersToFluidOunces(double value) {
         return value * 0.033814;
     }
-
+    //Method for converting tons to grams
     private static double convertTonsToGrams(double value) {
         return value * 907185;
     }
-
+    //Method for converting kg to grams
     private static double convertKilogramsToGrams(double value) {
         return value * 1000;
     }
-
+    //Method for converting pounds to grams
     private static double convertPoundsToGrams(double value) {
         return value * 453.592;
     }
-
+    //Method for converting ounce to grams
     private static double convertOuncesToGrams(double value) {
         return value * 28.3495;
     }
-
+    //Method for converting grams to tons
     private static double convertGramsToTons(double grams) {
         return grams * 0.00000110231;
     }
-
+    //Method for converting grams to kg
     private static double convertGramsToKilograms(double grams) {
         return grams * 0.001;
     }
-
+    //Method for converting grams to pounds
     private static double convertGramsToPounds(double grams) {
         return grams * 0.00220462;
     }
@@ -408,11 +413,11 @@ public class ConversionConfiguration {
     private static double convertGramsToOunces(double value) {
         return value * 0.035274;
     }
-
+    //Method for converting grams to ounce
     private static double convertMilesToInches(double value) {
         return value * 63360;
     }
-
+    //Method for converting kg to inch
     private static double convertKilometersToInches(double value) {
         return value * 39370.1;
     }
@@ -420,35 +425,37 @@ public class ConversionConfiguration {
     private static double convertMetersToInches(double value) {
         return value * 39.3701;
     }
-
+    //Method for converting cm to ft
     private static double convertFeetToInches(double value) {
         return value * 12;
     }
-
+    //Method for converting cm to inch
     private static double convertCentimetersToInches(double value) {
         return value * 0.393701;
     }
-
+    //Method for converting inch to cm
     private static double convertInchesToCentimeters(double value) {
         return value * 2.54;
     }
-
+    //Method for converting inch to ft
     private static double convertInchesToFeet(double value) {
         return value * 0.0833333;
     }
-
+    //Method for converting inch to m
     private static double convertInchesToMeters(double value) {
         return value * 0.0254;
     }
-
+    //Method for converting inch to km
     private static double convertInchesToKilometers(double value) {
         return value * 0.0000254;
     }
 
+    //Method for converting inch to miles
     private static double convertInchesToMiles(double value) {
         return value * 0.0000157828;
     }
 
+    // Utility method to round up a value to five decimal places
     private static double roundUpToFiveDecimals(double value) {
         return Math.round(value * 100000.0) / 100000.0;
     }
