@@ -78,7 +78,7 @@ public class SharedPrefUtils {
      //Retrieves a set of conversion items from shared preferences.
 
     public static Set<String> getConversions(String type, Context context){
-        Log.d("DebugUnitEase", "getConversions: " + type); // Debug log
+        Log.d("DebugUnitEase", "getConversions: " + type);
 
         SharedPreferences preferences = context.getSharedPreferences(type, Context.MODE_PRIVATE);
         Set<String> savedSet = preferences.getStringSet(type, Collections.emptySet());

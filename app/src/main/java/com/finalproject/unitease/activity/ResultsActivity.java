@@ -24,6 +24,8 @@ import java.util.Set;
 
 public class ResultsActivity extends AppCompatActivity {
 
+    // Initializing of variables
+
     private static final String FLOW_TAG = "Flow - ResultsActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ResultsActivity";
 
@@ -40,80 +42,68 @@ public class ResultsActivity extends AppCompatActivity {
     WearableRecyclerView wearableRecyclerView;
     private static String type, unit, value;
 
+    // Override methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Inflating the layout using view binding
-        resultsBinding = ActivityResultsBinding.inflate(getLayoutInflater());
+        resultsBinding = ActivityResultsBinding.inflate(getLayoutInflater()); // layout inflator with the help of view binding
         setContentView(resultsBinding.getRoot());
-
-        // Initialize UI components and retrieve intent data
         init();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        if (getIntent().getBooleanExtra("isHistory", false)){
+            Set<String> conversionsSet = new LinkedHashSet<>();
+            conversionsSet = SharedPrefUtils.getConversions(type,this); // getting the list of saved conversion from shared preference
+            // looping the array of conversions
+            for (String conversionString : conversionsSet) {
+                String[] parts = conversionString.split(":"); // splitting them up with :
 
-        // Check if it's a history view
-        if (getIntent().getBooleanExtra("isHistory", false)) {
-            // Load historical conversions from SharedPreferences
-            loadHistoricalConversions();
-        } else {
-            // Load conversions based on the provided type, unit, and value
-            loadConversions();
-        }
-
-        // Set up RecyclerView with the loaded conversions
-        setupRecyclerView();
-
-        // Save the current conversions to SharedPreferences
-        saveCurrentConversionsToSharedPreferences();
-    }
-
-    // Load historical conversions from SharedPreferences
-    private void loadHistoricalConversions() {
-        Set<String> conversionsSet = SharedPrefUtils.getConversions(type, this);
-
-        for (String conversionString : conversionsSet) {
-            String[] parts = conversionString.split(":");
-
-            if (parts.length == 2) {
-                String option = parts[0];
-                String value = parts[1];
-                ConversionModel conversion = new ConversionModel(0, option, value);
-                conversions.add(conversion);
-            } else {
-                Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
+                if (parts.length == 2) {
+                    String option = parts[0];
+                    String value = parts[1];
+                    ConversionModel conversion = new ConversionModel( 0,option, value);
+                    conversions.add(conversion);// adding the conversion
+                } else {
+                    Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
+                }
             }
         }
+        else {
+            conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));
+        }
+
+        Log.d(DEBUG_TAG, "onStart: list received " + conversions.size());
+        setupRecyclerView();
+        Set<String> conversionsSet = new LinkedHashSet<>();
+        for(ConversionModel conversion : conversions) {
+            conversionsSet.add(conversion.getOption()+":"+conversion.getValue());
+        }
+
+        SharedPrefUtils.saveConversions(type, conversionsSet, this);
     }
 
-    // Load conversions based on the provided type, unit, and value
-    private void loadConversions() {
-        conversions = ConversionConfiguration.getConversions(type, unit, Double.parseDouble(value));
-    }
+    // Setting up the recycler view
 
-    // Set up the RecyclerView to display conversions
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
-
         wearableRecyclerView.setHasFixedSize(true);
         wearableRecyclerView.setEdgeItemsCenteringEnabled(false);
         wearableRecyclerView.setLayoutManager(manager);
-
-        // Create and set up the adapter for the RecyclerView
         ResultsRecyclerViewAdapter adapter = new ResultsRecyclerViewAdapter(conversions,
                 new UnitEaseButton(UnitEaseButton.getButtonId(type)).getButtonBackgroundColor(),
                 this);
+        // setting up the adpater
         wearableRecyclerView.setAdapter(adapter);
+        // notifying thr adapter about the change
         adapter.notifyDataSetChanged();
     }
 
-    // Initialize UI components and set initial values
-    private void init() {
+    private void init(){
+        // assigning the values to the variables
         String conversionType = getIntent().getStringExtra("Conversion");
         type = conversionType;
         value = getIntent().getStringExtra("ConversionValue");
@@ -127,23 +117,13 @@ public class ResultsActivity extends AppCompatActivity {
         wearableRecyclerView = resultsBinding.resultsList;
     }
 
-    // Bind views with conversion-related information
-    private void bindViews(String conversion, int imageResource, int color) {
+    // method for view bindings
+    private void bindViews(String conversion, int imageResource, int color){
         conversionResultImage = resultsBinding.conversionResultImg;
         conversionResultText = resultsBinding.conversionResultText;
         conversionResultImage.setImageTintList(ColorStateList.valueOf(getColor(color)));
         conversionResultText.setTextColor(getColor(color));
         conversionResultText.setText(conversion);
         conversionResultImage.setImageResource(imageResource);
-    }
-
-    // Save the current conversions to SharedPreferences
-    private void saveCurrentConversionsToSharedPreferences() {
-        Set<String> conversionsSet = new LinkedHashSet<>();
-        for (ConversionModel conversion : conversions) {
-            conversionsSet.add(conversion.getOption() + ":" + conversion.getValue());
-        }
-
-        SharedPrefUtils.saveConversions(type, conversionsSet, this);
     }
 }
