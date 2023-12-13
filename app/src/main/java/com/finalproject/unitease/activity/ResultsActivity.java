@@ -24,6 +24,8 @@ import java.util.Set;
 
 public class ResultsActivity extends AppCompatActivity {
 
+    // Initializing of variables
+
     private static final String FLOW_TAG = "Flow - ResultsActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ResultsActivity";
 
@@ -40,10 +42,11 @@ public class ResultsActivity extends AppCompatActivity {
     WearableRecyclerView wearableRecyclerView;
     private static String type, unit, value;
 
+    // Override methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        resultsBinding = ActivityResultsBinding.inflate(getLayoutInflater());
+        resultsBinding = ActivityResultsBinding.inflate(getLayoutInflater()); // layout inflator with the help of view binding
         setContentView(resultsBinding.getRoot());
         init();
     }
@@ -53,16 +56,16 @@ public class ResultsActivity extends AppCompatActivity {
         super.onStart();
         if (getIntent().getBooleanExtra("isHistory", false)){
             Set<String> conversionsSet = new LinkedHashSet<>();
-            conversionsSet = SharedPrefUtils.getConversions(type,this);
-
+            conversionsSet = SharedPrefUtils.getConversions(type,this); // getting the list of saved conversion from shared preference
+            // looping the array of conversions
             for (String conversionString : conversionsSet) {
-                String[] parts = conversionString.split(":");
+                String[] parts = conversionString.split(":"); // splitting them up with :
 
                 if (parts.length == 2) {
                     String option = parts[0];
                     String value = parts[1];
                     ConversionModel conversion = new ConversionModel( 0,option, value);
-                    conversions.add(conversion);
+                    conversions.add(conversion);// adding the conversion
                 } else {
                     Log.e("DebugUnitEase", "Invalid format for: " + conversionString);
                 }
@@ -79,24 +82,28 @@ public class ResultsActivity extends AppCompatActivity {
             conversionsSet.add(conversion.getOption()+":"+conversion.getValue());
         }
 
-        SharedPrefUtils.saveConversions(type, conversionsSet, this); //********************
+        SharedPrefUtils.saveConversions(type, conversionsSet, this);
     }
+
+    // Setting up the recycler view
 
     private void setupRecyclerView() {
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
-
         wearableRecyclerView.setHasFixedSize(true);
         wearableRecyclerView.setEdgeItemsCenteringEnabled(false);
         wearableRecyclerView.setLayoutManager(manager);
-
         ResultsRecyclerViewAdapter adapter = new ResultsRecyclerViewAdapter(conversions,
                 new UnitEaseButton(UnitEaseButton.getButtonId(type)).getButtonBackgroundColor(),
                 this);
+        // setting up the adpater
         wearableRecyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();    }
+        // notifying thr adapter about the change
+        adapter.notifyDataSetChanged();
+    }
 
     private void init(){
+        // assigning the values to the variables
         String conversionType = getIntent().getStringExtra("Conversion");
         type = conversionType;
         value = getIntent().getStringExtra("ConversionValue");
@@ -110,6 +117,7 @@ public class ResultsActivity extends AppCompatActivity {
         wearableRecyclerView = resultsBinding.resultsList;
     }
 
+    // method for view bindings
     private void bindViews(String conversion, int imageResource, int color){
         conversionResultImage = resultsBinding.conversionResultImg;
         conversionResultText = resultsBinding.conversionResultText;
@@ -117,7 +125,5 @@ public class ResultsActivity extends AppCompatActivity {
         conversionResultText.setTextColor(getColor(color));
         conversionResultText.setText(conversion);
         conversionResultImage.setImageResource(imageResource);
-
-
     }
 }

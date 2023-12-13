@@ -31,6 +31,7 @@ import java.util.Arrays;
 
 public class ConversionOptionsActivity extends AppCompatActivity implements OptionsRecyclerViewAdapter.OnOptionSelectedListener, View.OnClickListener {
 
+    // Intialization of variables
     private static final String FLOW_TAG = "Flow - ConversionOptionsActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ConversionOptionsActivity";
 
@@ -47,6 +48,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
     private String[] options;
     FavoriteConversions favoriteConversions;
 
+    // ovverriden methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,9 +57,6 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         init();
         setupRecyclerView();
     }
-
-
-    // ----------------------------------------- Overridden Methods ----------------------------------------- //
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -76,9 +75,8 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         return super.dispatchTouchEvent(event);
     }
 
-    // ----------------------------------------- User Defined Methods ----------------------------------------- //
-
     private void init() {
+        // Binding the variables with value
         recyclerView = optionsBinding.optionsRecyclerView;
         checkButton = optionsBinding.checkboxButton;
         conversionButton = optionsBinding.conversionButton;
@@ -118,7 +116,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
     }
 
     private void setStrokeColor(TextInputLayout conversionInputLayout, int primaryColor, int secondaryColor) {
-
+    // setting the stroke color as per the attribute
         int[][] states = {
                 new int[]{android.R.attr.state_active},
                 new int[]{android.R.attr.state_focused},
@@ -143,7 +141,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
 
 
     }
-
+    // setting up the recycler view
     private void setupRecyclerView() {
         recyclerView.setHasFixedSize(true);
         recyclerView.setEdgeItemsCenteringEnabled(true);
@@ -152,15 +150,16 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         recyclerView.setAdapter(adapter);
     }
 
+    // on option seleted method
     @Override
     public void onOptionSelected(String buttonText) {
         Log.d(DEBUG_TAG, "onOptionSelected: selected option is " + buttonText);
         unit = buttonText;
     }
 
+    // Onclick listener
     @Override
     public void onClick(View v) {
-
         if (v == checkButton) {
             if (!isConversionButtonFavorite) {
                 setFavoriteButton(true);
@@ -190,7 +189,7 @@ public class ConversionOptionsActivity extends AppCompatActivity implements Opti
         }
 
     }
-
+    // implementation for facourite button click set
     private void setFavoriteButton( Boolean isFavorite) {
         if (isFavorite) {
             checkButton.setIconResource(R.drawable.heart_filled);

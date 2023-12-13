@@ -26,6 +26,7 @@ import java.util.List;
 
 public class ChooseConversionActivity extends AppCompatActivity implements View.OnClickListener, ConversionsRecyclerViewAdapter.ButtonClickListener {
 
+    // Initializing the variables
     private static final String FLOW_TAG = "Flow - ChooseConversionActivity";
     private static final String DEBUG_TAG = "DebugUnitEase - ChooseConversionActivity";
     private static boolean isScrolled = false;
@@ -40,6 +41,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     FavoriteConversions conversions;
     List<FavoritesModel> favoriteConversionsList;
 
+    // overriden methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,15 +51,12 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         configureScreen();
     }
 
-
     @Override
     protected void onStart() {
         super.onStart();
         setupLayoutManager();
 
     }
-
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -65,10 +64,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         updateFavoriteConversions();
     }
 
-
-
-    // ----------------------------------------- Overridden Methods ----------------------------------------- //
-
+    // Onclick listener
     @Override
     public void onClick(View v) {
         if (v == scrollButton) {
@@ -91,19 +87,15 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
         }
     }
 
-    // ----------------------------------------- Defined Methods ----------------------------------------- //
-
     // configure the screen based on the screen type
     private void configureScreen() {
-
-        isScreenRound = this.getResources().getConfiguration().isScreenRound();
+        isScreenRound = this.getResources().getConfiguration().isScreenRound(); // checking if the screen is round
         conversions = new FavoriteConversions(this);
         if (isScreenRound) configureRoundScreen();
         else configureRectangularScreen();
         updateFavoriteConversions();
         isHistory = getIntent().getBooleanExtra("isHistory", false);
-
-
+        // if there is no history of favourites
         if (!isHistory) {
             customCategoryButton1.setVisibility(View.VISIBLE);
             customCategoryButton2.setVisibility(View.VISIBLE);
@@ -146,7 +138,6 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
 
     // configure the screen for round screens
     private void configureRoundScreen() {
-
         ActivityChooseConversionRoundedBinding binding = ActivityChooseConversionRoundedBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         recyclerView = binding.rvChooseConversation;
@@ -169,6 +160,7 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     }
 
 
+    // on click of the button
     @Override
     public void onButtonClick(String buttonText) {
         Log.d(DEBUG_TAG, "onButtonClick: clicked on button " + buttonText);
@@ -182,12 +174,14 @@ public class ChooseConversionActivity extends AppCompatActivity implements View.
     private void updateFavoriteConversions() {
         setFavoriteConversions(customCategoryButton1, customCategoryButton2);
     }
-// **************** Debora Changed here
+    // Setting the favourite conversions
     private void setFavoriteConversions(MaterialButton button1, MaterialButton button2) {
         Log.d(DEBUG_TAG, "setFavoriteConversions: getting favorite conversions");
         favoriteConversionsList = conversions.getFavorites();
         Log.d(DEBUG_TAG, "setFavoriteConversions: favorite conversions size is " + favoriteConversionsList.size());
+        // checking the favourites conversion list if there are any
         if(favoriteConversionsList.size() > 0){
+            // if there are then change the favourite with new favourite
             String button1Text = favoriteConversionsList.get(0).getButtonName();
             int conversionId = UnitEaseButton.getButtonId(button1Text);
             UnitEaseButton button = new UnitEaseButton(conversionId);

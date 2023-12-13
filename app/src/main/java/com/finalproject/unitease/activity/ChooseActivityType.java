@@ -13,14 +13,15 @@ import com.finalproject.unitease.databinding.ActivityChooseTypeBinding;
 import com.google.android.material.button.MaterialButton;
 
 public class ChooseActivityType extends AppCompatActivity implements View.OnClickListener {
-
+    // Initializing the variables
     ActivityChooseTypeBinding chooseTypeBinding;
     MaterialButton conversionButton, historyButton;
-
+    // Overriden methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SplashScreen.installSplashScreen(this);
+        // inflating with layout inflator
         chooseTypeBinding = ActivityChooseTypeBinding.inflate(getLayoutInflater());
         setContentView(chooseTypeBinding.getRoot());
         init();
@@ -28,6 +29,7 @@ public class ChooseActivityType extends AppCompatActivity implements View.OnClic
 
     private void init() {
         Log.d("MeuApp", "chegou no init ");
+        // setting the onclick listeners and binding the buttons
         conversionButton = chooseTypeBinding.conversionButton;
         historyButton = chooseTypeBinding.historyButton;
         conversionButton.setOnClickListener(this);
